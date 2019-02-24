@@ -1,0 +1,18 @@
+<h1>{{ pizza.pizza_name }}</h1>
+
+{% if error_message %}
+  <p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
+<ul>
+  {% for size in size_list %}
+    <li>{{ size }}</li>
+  {% endfor %}
+</ul>
+
+<h2>Toppings</h2>
+<ul>
+  {% for topping in topping_list %}
+    <li>{{ topping }}</li>
+  {% endfor %}
+</ul>

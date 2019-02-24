@@ -6,5 +6,10 @@ from . import views
 app_name = 'orders'
 
 urlpatterns = [
-    path("", views.IndexView.as_view(), name="index")
+
+    # ex: /
+    path('', views.IndexView.as_view(), name='index'),
+
+    # ex: /1
+    path('<int:pk>/', views.DetailView.as_view(), name='details'),
 ]
