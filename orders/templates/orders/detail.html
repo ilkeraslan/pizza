@@ -2,17 +2,21 @@
 
 {% if error_message %}
   <p><strong>{{ error_message }}</strong></p>
+{% else %}
+  <p>Type: {{ pizza.pizza_type }}</p>
+  <p>Description: {{ pizza.pizza_description }}</p>
+
+  <h2>Sizes</h2>
+  <ul>
+    {% for size in size_list %}
+      <li>{{ size }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Toppings</h2>
+  <ul>
+    {% for topping in topping_list %}
+      <li>{{ topping }}</li>
+    {% endfor %}
+  </ul>
 {% endif %}
-
-<ul>
-  {% for size in size_list %}
-    <li>{{ size }}</li>
-  {% endfor %}
-</ul>
-
-<h2>Toppings</h2>
-<ul>
-  {% for topping in topping_list %}
-    <li>{{ topping }}</li>
-  {% endfor %}
-</ul>
