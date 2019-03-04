@@ -15,5 +15,5 @@ urlpatterns = [
     path('<int:pk>/', views.DetailView.as_view(), name='details'),
 
     # ex: /login
-    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('login/', views.login_view, name='login'),
 ]

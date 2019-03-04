@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
 
+from .forms import NameForm
+
 from .models import Pizza, Size, Topping
 
 
@@ -46,18 +48,29 @@ class DetailView(generic.DetailView):
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+        form = NameForm(request.POST)
 
-        if user is not None:
-            login(request, user)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
 
-            # Redirect to index
-            return HttpResponseRedirect(reverse('index'))
-        else:
-            # Return with error message
-            return render(request, 'registration/login.html', {'message': 'Invalid credentials.'})
+            user = authenticate(request, username=username, password=password)
+            print(user)
 
+        # username = request.POST['username']
+        # password = request.POST['password']
+        # user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+
+                # Redirect to index
+                return HttpResponseRedirect(reverse('orders:index'))
+
+            else:
+                form = NameForm()
+                return render(request, 'registration/login.html', {'form': form})
     else:
-        return render(request, 'registration/login.html')
+        form = NameForm()
+        return render(request, 'registration/login.html', {'form': form})
