@@ -67,10 +67,5 @@ def login_view(request):
 
                 # Redirect to index
                 return HttpResponseRedirect(reverse('orders:index'))
-
-            else:
-                form = NameForm()
-                return render(request, 'registration/login.html', {'form': form})
-    else:
-        form = NameForm()
-        return render(request, 'registration/login.html', {'form': form})
+    form = NameForm()
+    return render(request, 'registration/login.html', {'form': form})
