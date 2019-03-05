@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -66,6 +67,7 @@ def login_view(request):
                 login(request, user)
 
                 # Redirect to index
+                messages.success(request, "Logged in.")
                 return HttpResponseRedirect(reverse('orders:index'))
     form = NameForm()
     return render(request, 'registration/login.html', {'form': form})
