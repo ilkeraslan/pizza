@@ -1,20 +1,28 @@
-{% if messages %}
-  {% for message in messages %}
-    <div class="alert {{ message.tags }} alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      {{ message }}
-    </div>
-  {% endfor %}
-{% endif %}
+{% extends 'orders/base.html' %}
 
-<h1>Menu</h1>
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Menu</li>
+{% endblock %}
 
-{% if menu_list %}
-  {% for item in menu_list %}
-    <li>{{ item }}</li>
-  {% endfor %}
-{% else %}
-  <p>No item is available.</p>
-{% endif %}
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <h1>Menu</h1>
+
+  {% if menu_list %}
+    {% for item in menu_list %}
+      <li>{{ item }}</li>
+    {% endfor %}
+  {% else %}
+    <p>No item is available.</p>
+  {% endif %}
+{% endblock %}
