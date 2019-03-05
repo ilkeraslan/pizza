@@ -15,10 +15,12 @@
   </head>
   <body>
     <div class="container">
-      <ol class="breadcrumb my-4">
-        {% block breadcrumb %}
-        {% endblock %}
-      </ol>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb my-2">
+          {% block breadcrumb %}
+          {% endblock %}
+        </ol>
+      </nav>
       {% block content %}
       {% endblock %}
     </div>

@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
 
-from .forms import NameForm
+from .forms import LoginForm
 
 from .models import Pizza, Size, Topping
 
@@ -49,7 +49,7 @@ class DetailView(generic.DetailView):
 
 def login_view(request):
     if request.method == 'POST':
-        form = NameForm(request.POST)
+        form = LoginForm(request.POST)
 
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -69,5 +69,5 @@ def login_view(request):
                 # Redirect to index
                 messages.success(request, "Logged in.")
                 return HttpResponseRedirect(reverse('orders:index'))
-    form = NameForm()
+    form = LoginForm()
     return render(request, 'registration/login.html', {'form': form})

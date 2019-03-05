@@ -2,8 +2,7 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'orders:index' %}">Menu</a></li>
-  <li>/</li>
-  <li class="breadcrumb-active">{{ pizza.pizza_name }}</li>
+  <li class="breadcrumb-item active" aria-current="page">{{ pizza.pizza_name }}</li>
 {% endblock %}
 
 {% block content %}
