@@ -40,7 +40,12 @@ class SignupForm(UserCreationForm):
         label='Email',
         max_length=100,
     )
+    birth_date = forms.DateField(
+        help_text='Required. Format: YYYY-MM-DD',
+        label='Birth Date',
+        required=True,
+    )
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
+        fields = ('username', 'first_name', 'last_name', 'birth_date', 'email', 'password1', 'password2',)
