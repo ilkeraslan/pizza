@@ -2,19 +2,19 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'orders:index' %}">Menu</a></li>
-  <li class="breadcrumb-item active" aria-current="page">Login</li>
+  <li class="breadcrumb-item active" aria-current="page">Signup</li>
 {% endblock %}
 
 {% block content %}
-  {% if messages %}
-    <ul class="messages">
-    {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
+{% if messages %}
+  <ul class="messages">
+  {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+  {% endfor %}
+  </ul>
+{% endif %}
 
-  <form class="" action="{% url 'orders:login' %}" method="post">
+  <form class="" action="{% url 'orders:signup' %}" method="post">
     {% csrf_token %}
     {% for field in form %}
       <p>
@@ -28,7 +28,6 @@
         {% endfor %}
       </p>
     {% endfor %}
-    <button class="btn btn-success" type="submit" name="">Login</button>
-    <!-- <input type="hidden" name="next" value="{{ next }}"> -->
+    <button class="btn btn-success" type="submit">Sign up</button>
   </form>
 {% endblock %}
