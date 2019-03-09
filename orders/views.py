@@ -1,12 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
 
-from .forms import LoginForm, SignupForm
+from .forms import CustomLoginForm, SignupForm
 
 from .models import Pizza, Size, Topping
 
@@ -47,28 +48,39 @@ class DetailView(generic.DetailView):
     def get_queryset(self):
         return Pizza.objects.all()
 
+class CustomLoginView(LoginView):
+    form_class = CustomLoginForm
 
-def login_view(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
 
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            email = form.cleaned_data['email']
-            raw_password = form.cleaned_data['password']
-
-            user = authenticate(request, username=username, password=raw_password)
-
-            if user is not None:
-                login(request, user)
-
-                # Redirect to index
-                messages.success(request, "Logged in.")
-                return HttpResponseRedirect(reverse('orders:index'))
-
-    else:
-        form = LoginForm()
-    return render(request, 'registration/login.html', {'form': form})
+# def login_view(request):
+#     if request.method == 'POST':
+#         form = LoginForm(request.POST)
+#         print(form)
+#
+#         if form.is_valid():
+#             username = form.cleaned_data['username']
+#             # email = form.cleaned_data['email']
+#             password = form.cleaned_data['password']
+#
+#             print(username)
+#
+#             user = authenticate(request, username=username, password=password)
+#             print(user)
+#
+#             if user is not None:
+#                 login(request, user)
+#
+#                 # Redirect to index
+#                 messages.success(request, "Logged in.")
+#                 return HttpResponseRedirect(reverse('orders:index'))
+#             else:
+#                 messages.error(request, "Invalid credentials.")
+#         else:
+#             print("error")
+#             return render(request, 'registration/login.html', {'form': LoginForm()})
+#
+#     form = LoginForm()
+#     return render(request, 'registration/login.html', {'form': form})
 
 
 def signup_view(request):

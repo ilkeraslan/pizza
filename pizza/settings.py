@@ -30,7 +30,13 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+LOGIN_REDIRECT_URL = 'orders:index'
+
+RECAPTCHA_PUBLIC_KEY = 'MyRecaptchaKey123'
+RECAPTCHA_PRIVATE_KEY = 'MyRecaptchaPrivateKey456'
+
 INSTALLED_APPS = [
+    'captcha',
     'orders.apps.OrdersConfig',
     'django.contrib.admin',
     'django.contrib.auth',

@@ -1,15 +1,11 @@
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox, ReCaptchaV3
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 
 
-class LoginForm(forms.Form):
-    username = forms.CharField(
-        error_messages={'required': 'Please enter your username.'},
-        help_text='Username',
-        label='Username',
-        max_length=100,
-    )
+class CustomLoginForm(AuthenticationForm):
     email = forms.EmailField(
         error_messages={
             'required': 'Please enter your email.',
@@ -17,12 +13,7 @@ class LoginForm(forms.Form):
         },
         help_text='Email',
     )
-    password = forms.CharField(
-        error_messages={'required': 'Please enter your password.'},
-        label='Password',
-        max_length=25,
-        widget=forms.PasswordInput,
-    )
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
 
 
 class SignupForm(UserCreationForm):
@@ -46,6 +37,6 @@ class SignupForm(UserCreationForm):
         required=True,
     )
 
-    class Meta:
+    class Meta():
         model = User
         fields = ('username', 'first_name', 'last_name', 'birth_date', 'email', 'password1', 'password2',)
