@@ -1,3 +1,6 @@
+import json
+import urllib
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
@@ -48,39 +51,51 @@ class DetailView(generic.DetailView):
     def get_queryset(self):
         return Pizza.objects.all()
 
-class CustomLoginView(LoginView):
-    form_class = CustomLoginForm
 
+def login_view(request):
+    if request.method == 'POST':
+        form = CustomLoginForm(request.POST)
 
-# def login_view(request):
-#     if request.method == 'POST':
-#         form = LoginForm(request.POST)
-#         print(form)
-#
-#         if form.is_valid():
-#             username = form.cleaned_data['username']
-#             # email = form.cleaned_data['email']
-#             password = form.cleaned_data['password']
-#
-#             print(username)
-#
-#             user = authenticate(request, username=username, password=password)
-#             print(user)
-#
-#             if user is not None:
-#                 login(request, user)
-#
-#                 # Redirect to index
-#                 messages.success(request, "Logged in.")
-#                 return HttpResponseRedirect(reverse('orders:index'))
-#             else:
-#                 messages.error(request, "Invalid credentials.")
-#         else:
-#             print("error")
-#             return render(request, 'registration/login.html', {'form': LoginForm()})
-#
-#     form = LoginForm()
-#     return render(request, 'registration/login.html', {'form': form})
+        if form.is_valid():
+
+            ''' Begin reCAPTCHA validation '''
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            url = 'https://www.google.com/recaptcha/api/siteverify'
+            values = {
+                'secret': '6Lfc-pYUAAAAAIcA3emnerVYDhqnOTyLs4V1O6cT',
+                'response': recaptcha_response
+            }
+            data = urllib.parse.urlencode(values).encode()
+            req =  urllib.request.Request(url, data=data)
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
+            ''' End reCAPTCHA validation '''
+
+            print(result)
+
+            username = form.cleaned_data['username']
+            # email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+
+            print(username)
+
+            user = authenticate(request, username=username, password=password)
+            print(user)
+
+            if user is not None:
+                login(request, user)
+
+                # Redirect to index
+                messages.success(request, "Logged in.")
+                return HttpResponseRedirect(reverse('orders:index'))
+            else:
+                messages.error(request, "Invalid credentials.")
+        else:
+            print("error")
+            return render(request, 'registration/login.html', {'form': CustomLoginForm()})
+
+    form = CustomLoginForm()
+    return render(request, 'registration/login.html', {'form': form})
 
 
 def signup_view(request):

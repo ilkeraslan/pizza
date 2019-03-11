@@ -1,5 +1,5 @@
 from captcha.fields import ReCaptchaField
-from captcha.widgets import ReCaptchaV2Checkbox, ReCaptchaV3
+from captcha.widgets import ReCaptchaV2Checkbox
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
@@ -13,7 +13,6 @@ class CustomLoginForm(AuthenticationForm):
         },
         help_text='Email',
     )
-    captcha = ReCaptchaField(widget=ReCaptchaV3)
 
 
 class SignupForm(UserCreationForm):

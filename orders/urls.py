@@ -16,7 +16,7 @@ urlpatterns = [
     path('<int:pk>/', views.DetailView.as_view(), name='details'),
 
     # ex: /login
-    path('login/', views.CustomLoginView.as_view(), name='login'),
+    path('login/', views.login_view, name='login'),
 
     # ex: /signup
     path('signup/', views.signup_view, name='signup'),
