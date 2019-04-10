@@ -1,10 +1,10 @@
+import requests
 import json
-import urllib
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -56,28 +56,14 @@ def login_view(request):
     if request.method == 'POST':
         form = CustomLoginForm(request.POST)
 
+        result = is_recaptcha_valid(request)
+        print(result) # prints True
+
         if form.is_valid():
 
-            ''' Begin reCAPTCHA validation '''
-            recaptcha_response = request.POST.get('g-recaptcha-response')
-            url = 'https://www.google.com/recaptcha/api/siteverify'
-            values = {
-                'secret': '6Lfc-pYUAAAAAIcA3emnerVYDhqnOTyLs4V1O6cT',
-                'response': recaptcha_response
-            }
-            data = urllib.parse.urlencode(values).encode()
-            req =  urllib.request.Request(url, data=data)
-            response = urllib.request.urlopen(req)
-            result = json.loads(response.read().decode())
-            ''' End reCAPTCHA validation '''
-
-            print(result)
-
             username = form.cleaned_data['username']
-            # email = form.cleaned_data['email']
+            email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-
-            print(username)
 
             user = authenticate(request, username=username, password=password)
             print(user)
@@ -94,7 +80,8 @@ def login_view(request):
             print("error")
             return render(request, 'registration/login.html', {'form': CustomLoginForm()})
 
-    form = CustomLoginForm()
+    else:
+            form = CustomLoginForm()
     return render(request, 'registration/login.html', {'form': form})
 
 
@@ -129,3 +116,17 @@ def signup_view(request):
     else:
             form = SignupForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+
+def is_recaptcha_valid(request):
+    """
+    Verify if the response for the Google recaptcha is valid.
+    """
+    return requests.post(
+        settings.GOOGLE_VERIFY_RECAPTCHA_URL,
+        data={
+            'secret': settings.RECAPTCHA_PRIVATE_KEY,
+            'response': request.POST.get('g-recaptcha-response'),
+        },
+        verify=True
+    ).json().get("success", False)

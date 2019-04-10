@@ -28,7 +28,11 @@
         {% endfor %}
       </p>
     {% endfor %}
-    <div class="g-recaptcha" data-sitekey="6Lfc-pYUAAAAAO3taFS_WEVDkOSPmOsNRN-hVah-"></div>
+
+    <!-- ReCAPTCHAV3 -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <div class="g-recaptcha" data-sitekey='6Lfc-pYUAAAAAO3taFS_WEVDkOSPmOsNRN-hVah-'></div>
     <button class="btn btn-success" type="submit" name="">Login</button>
     <!-- <input type="hidden" name="next" value="{{ next }}"> -->
   </form>

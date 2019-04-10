@@ -29,11 +29,11 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
 LOGIN_REDIRECT_URL = 'orders:index'
 
-RECAPTCHA_PUBLIC_KEY = 'MyRecaptchaKey123'
-RECAPTCHA_PRIVATE_KEY = 'MyRecaptchaPrivateKey456'
+GOOGLE_VERIFY_RECAPTCHA_URL = 'https://www.google.com/recaptcha/api/siteverify'
+RECAPTCHA_PUBLIC_KEY = '6Lfc-pYUAAAAAO3taFS_WEVDkOSPmOsNRN-hVah-'
+RECAPTCHA_PRIVATE_KEY = '6Lfc-pYUAAAAAIcA3emnerVYDhqnOTyLs4V1O6cT'
 
 INSTALLED_APPS = [
     'captcha',
