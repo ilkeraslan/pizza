@@ -54,13 +54,13 @@ class DetailView(generic.DetailView):
 
 def login_view(request):
     if request.method == 'POST':
-        form = CustomLoginForm(request.POST)
+        form = CustomLoginForm(data=request.POST)
 
-        result = is_recaptcha_valid(request)
-        print(result) # prints True
+        if not is_recaptcha_valid(request):
+            messages.error(request, "Invalid recaptcha.")
+            return render(request, 'registration/login.html', {'form': CustomLoginForm()})
 
         if form.is_valid():
-
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
@@ -77,7 +77,7 @@ def login_view(request):
             else:
                 messages.error(request, "Invalid credentials.")
         else:
-            print("error")
+            messages.error(request, "Invalid form submission.")
             return render(request, 'registration/login.html', {'form': CustomLoginForm()})
 
     else:
