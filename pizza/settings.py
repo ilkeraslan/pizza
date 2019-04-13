@@ -36,7 +36,6 @@ RECAPTCHA_PUBLIC_KEY = '6Lfc-pYUAAAAAO3taFS_WEVDkOSPmOsNRN-hVah-'
 RECAPTCHA_PRIVATE_KEY = '6Lfc-pYUAAAAAIcA3emnerVYDhqnOTyLs4V1O6cT'
 
 INSTALLED_APPS = [
-    'captcha',
     'orders.apps.OrdersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
