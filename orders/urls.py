@@ -20,4 +20,7 @@ urlpatterns = [
 
     # ex: /signup
     path('signup/', views.signup_view, name='signup'),
+
+    # ex: /logout
+    path('logout/', views.logout_view, name='logout'),
 ]

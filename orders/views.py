@@ -3,7 +3,7 @@ import json
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -66,7 +66,6 @@ def login_view(request):
             password = form.cleaned_data['password']
 
             user = authenticate(request, username=username, password=password)
-            print(user)
 
             if user is not None:
                 login(request, user)
@@ -116,6 +115,14 @@ def signup_view(request):
     else:
             form = SignupForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+
+    # Redirect to login with a message
+    messages.success(request, "Successfully logged out.")
+    return HttpResponseRedirect(reverse('orders:index'))
 
 
 def is_recaptcha_valid(request):
