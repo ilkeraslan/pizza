@@ -6,17 +6,10 @@
 {% endblock %}
 
 {% block content %}
-{% if messages %}
-  <ul class="messages">
-  {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-  {% endfor %}
-  </ul>
-{% endif %}
-
-  <form class="" action="{% url 'orders:signup' %}" method="post">
+  <form class="" action="{% url 'orders:signup' %}" method="post" novalidate>
     {% csrf_token %}
     {% for field in form %}
+    <div class="form-group">
       <p>
         {{ field.label_tag }}<br>
         {{ field }}
@@ -27,6 +20,7 @@
           <p style="color: red">{{ error }}</p>
         {% endfor %}
       </p>
+    </div>
     {% endfor %}
     <button class="btn btn-success" type="submit">Sign up</button>
   </form>
