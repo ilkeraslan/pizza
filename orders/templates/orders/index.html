@@ -10,7 +10,7 @@
 
   {% if menu_list %}
   {% for item in menu_list %}
-  <li>{{ item }}</li>
+  <a href="{% url 'orders:details' item.pk %}"><li>{{ item }}</li></a>
   {% endfor %}
   {% else %}
   <p>No item is available.</p>
