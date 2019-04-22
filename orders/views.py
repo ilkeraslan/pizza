@@ -26,6 +26,7 @@ class IndexView(generic.ListView):
     def get_queryset(self):
 
         # Number of visits to this view
+        # Get the value of visit_number session key, set to 0 if it has not been set
         self.visit_number = self.request.session.get('visit_number', 0)
         self.request.session['visit_number'] = self.visit_number + 1
         return Pizza.objects.all()

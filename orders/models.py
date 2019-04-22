@@ -10,6 +10,9 @@ class Pizza(models.Model):
     def __str__(self):
         return f"{self.pizza_name} ({self.pizza_type}) -- {self.pizza_description}"
 
+    class Meta:
+        ordering = ['pizza_price']
+
 
 class Size(models.Model):
     size_text = models.CharField(max_length=6)
