@@ -24,7 +24,22 @@ class IndexView(generic.ListView):
     context_object_name = 'menu_list'
 
     def get_queryset(self):
+
+        # Number of visits to this view
+        self.visit_number = self.request.session.get('visit_number', 0)
+        self.request.session['visit_number'] = self.visit_number + 1
         return Pizza.objects.all()
+
+    # Override get_context_data() method to addd extra content
+    def get_context_data(self, **kwargs):
+        # Call the base implementation
+        context = super().get_context_data(**kwargs)
+
+        # Add visit numbers
+        context['visit_number'] = self.visit_number
+
+        # Return context
+        return context
 
 
 class DetailView(generic.DetailView):

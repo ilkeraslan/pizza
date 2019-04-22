@@ -1,17 +1,27 @@
 {% extends 'orders/base.html' %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item active" aria-current="page">Menu</li>
+<li class="breadcrumb-item active" aria-current="page">Menu</li>
 {% endblock %}
 
 {% block content %}
+<div>
   <h1>Menu</h1>
 
   {% if menu_list %}
-    {% for item in menu_list %}
-      <li>{{ item }}</li>
-    {% endfor %}
+  {% for item in menu_list %}
+  <li>{{ item }}</li>
+  {% endfor %}
   {% else %}
-    <p>No item is available.</p>
+  <p>No item is available.</p>
   {% endif %}
+</div>
+<div>
+  <footer class="footer">
+    <div class="container">
+      <hr>
+      <p>You have visited this website <strong>{{ visit_number }}</strong>{% if visit_number == 1 %} time{% else %} times{% endif %}.</p>
+    </div>
+  </footer>
+</div>
 {% endblock %}
