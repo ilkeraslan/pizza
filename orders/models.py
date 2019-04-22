@@ -27,3 +27,6 @@ class Topping(models.Model):
 
     def __str__(self):
         return f"{self.topping_text} ({self.topping_price} €)"
+
+    class Meta:
+        ordering = ['topping_price']

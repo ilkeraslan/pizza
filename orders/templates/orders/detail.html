@@ -14,18 +14,29 @@
     <p>Type: {{ pizza.pizza_type }}</p>
     <p>Description: {{ pizza.pizza_description }}</p>
 
-    <h2>Sizes</h2>
-    <ul>
-      {% for size in size_list %}
-        <li>{{ size }}</li>
-      {% endfor %}
-    </ul>
-
-    <h2>Toppings</h2>
-    <ul>
-      {% for topping in topping_list %}
-        <li>{{ topping }}</li>
-      {% endfor %}
-    </ul>
+    <form class="" action="#" method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="size">Size</label>
+        <select class="form-control" name="">
+          {% for size in size_list %}
+            <option value="{{ size }}">{{ size }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-row align-items-center">
+      <div class="form-group col-auto">
+        <label for="topping">Topping</label>
+        <select class="form-control" name="">
+          {% for topping in topping_list %}
+            <option value="{{ topping }}">{{ topping }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group col-auto">
+        <button class="btn btn-secondary" type="submit">Add topping</button>
+      </div>
+      </div>
+    </form>
   {% endif %}
 {% endblock %}
