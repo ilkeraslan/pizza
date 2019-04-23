@@ -15,12 +15,14 @@ urlpatterns = [
     # ex: /1
     path('<int:pk>/', views.DetailView.as_view(), name='details'),
 
+    path('cart/', views.view_cart, name='cart'),
+
     # ex: /login
     path('login/', views.login_view, name='login'),
 
-    # ex: /signup
-    path('signup/', views.signup_view, name='signup'),
-
     # ex: /logout
     path('logout/', views.logout_view, name='logout'),
+
+    # ex: /signup
+    path('signup/', views.signup_view, name='signup'),
 ]

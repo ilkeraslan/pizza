@@ -153,3 +153,21 @@ def is_recaptcha_valid(request):
         },
         verify=True
     ).json().get("success", False)
+
+
+def view_cart(request):
+    cart = request.session.get('cart', {})
+
+    context = {
+        'cart': cart
+    }
+
+    return render(request, 'orders/cart.html', context)
+
+
+def add_to_cart(request, item_id, quantity):
+    cart = request.session.get('cart', {})
+    cart[item_id] = quantity
+    request.session['cart'] = cart
+
+    return HttpResponseRedirect(reverse('orders:cart'))

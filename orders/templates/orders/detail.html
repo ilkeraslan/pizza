@@ -1,42 +1,44 @@
 {% extends 'orders/base.html' %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'orders:index' %}">Menu</a></li>
-  <li class="breadcrumb-item active" aria-current="page">{{ pizza.pizza_name }}</li>
+<li class="breadcrumb-item"><a href="{% url 'orders:index' %}">Menu</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ pizza.pizza_name }}</li>
 {% endblock %}
 
 {% block content %}
-  <h1>{{ pizza.pizza_name }}</h1>
+<h1>{{ pizza.pizza_name }}</h1>
 
-  {% if error_message %}
-    <p><strong>{{ error_message }}</strong></p>
-  {% else %}
-    <p>Type: {{ pizza.pizza_type }}</p>
-    <p>Description: {{ pizza.pizza_description }}</p>
+{% if error_message %}
+<p><strong>{{ error_message }}</strong></p>
+{% else %}
+<p>Type: {{ pizza.pizza_type }}</p>
+<p>Description: {{ pizza.pizza_description }}</p>
 
-    <form class="" action="#" method="post">
-      {% csrf_token %}
-      <div class="form-group">
-        <label for="size">Size</label>
-        <select class="form-control" name="">
-          {% for size in size_list %}
-            <option value="{{ size }}">{{ size }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="form-row align-items-center">
-      <div class="form-group col-auto">
-        <label for="topping">Topping</label>
-        <select class="form-control" name="">
-          {% for topping in topping_list %}
-            <option value="{{ topping }}">{{ topping }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="form-group col-auto">
-        <button class="btn btn-secondary" type="submit">Add topping</button>
-      </div>
-      </div>
-    </form>
-  {% endif %}
+<form class="" action="#" method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="size">Size</label>
+    <select class="form-control" name="">
+      {% for size in size_list %}
+      <option value="{{ size }}">{{ size }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="topping">Topping</label>
+  </div>
+  <div class="form-row align-items-center">
+    <div class="form-group col-auto">
+      <select class="form-control" name="">
+        {% for topping in topping_list %}
+        <option value="{{ topping }}">{{ topping }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-auto">
+      <button class="btn btn-secondary" type="submit">Add topping</button>
+    </div>
+  </div>
+</form>
+{% endif %}
 {% endblock %}
