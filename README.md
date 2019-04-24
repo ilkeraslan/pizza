@@ -11,5 +11,6 @@ A pizza restaurant management system.
 - [ ] Site administrators should have access to a page where they can view any orders that have already been placed.
 - [ ] Integrate with the Stripe API to allow users to actually use a credit card to make a purchase during checkout.
 - [ ] Send users a confirmation email once their purchase is complete.
+- [ ] Use Oscar framework for e-commerce features.
 
 ###### This project is under development.
