@@ -162,6 +162,8 @@ def view_cart(request):
         'cart': cart
     }
 
+    print(context)
+
     return render(request, 'orders/cart.html', context)
 
 

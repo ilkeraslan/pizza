@@ -6,6 +6,20 @@
 {% endblock %}
 
 {% block content %}
-<h1>Cart</h1>
-<h2>TODO</h2>
+<div class="">
+  <div class="">
+    <h1>Cart</h1>
+  </div>
+  <div class="">
+    {% if cart %}
+      <ol>
+      {% for item_in_cart in cart %}
+        <li>{{ item_in_cart }}</li>
+      {% endfor %}
+      </ol>
+    {% else %}
+      <p>No item in cart.</p>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}
