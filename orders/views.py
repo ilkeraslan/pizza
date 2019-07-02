@@ -162,12 +162,15 @@ def view_cart(request):
         'cart': cart
     }
 
+    print(cart)
+
     return render(request, 'orders/cart.html', context)
 
 
-def add_to_cart(request, item_id, quantity):
+def add_to_cart(request):
     cart = request.session.get('cart', {})
-    cart[item_id] = quantity
+    pizzaId = request.POST['pizzaId']
+    cart['item_id'] = pizzaId
     request.session['cart'] = cart
 
-    return HttpResponseRedirect(reverse('orders:details'))
+    return HttpResponseRedirect(reverse('orders:details', args=(pizzaId,)))

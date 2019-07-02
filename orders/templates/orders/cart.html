@@ -13,8 +13,8 @@
   <div id="cart" class="">
     {% if cart %}
     <ol>
-    {% for item_in_cart in cart %}
-      <li>{{ item_in_cart }}</li>
+    {% for item_in_cart in cart.values %}
+      <li>Pizza ID: {{ item_in_cart }}</li>
     {% endfor %}
     </ol>
     {% else %}
