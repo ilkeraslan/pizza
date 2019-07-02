@@ -162,8 +162,6 @@ def view_cart(request):
         'cart': cart
     }
 
-    print(context)
-
     return render(request, 'orders/cart.html', context)
 
 
@@ -172,4 +170,4 @@ def add_to_cart(request, item_id, quantity):
     cart[item_id] = quantity
     request.session['cart'] = cart
 
-    return HttpResponseRedirect(reverse('orders:cart'))
+    return HttpResponseRedirect(reverse('orders:details'))

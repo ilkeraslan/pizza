@@ -14,6 +14,15 @@
 <p>Type: {{ pizza.pizza_type }}</p>
 <p>Description: {{ pizza.pizza_description }}</p>
 
+<div id="add_to_cart" class="">
+  <form class="" action="{% url 'orders:add_to_cart' %}" method="post">
+    {% csrf_token %}
+
+      <button class="btn btn-success" type="submit">Add to cart </button>
+  </form>
+</div>
+
+<div>
 <form class="" action="#" method="post">
   {% csrf_token %}
   <div class="form-group">
@@ -40,5 +49,6 @@
     </div>
   </div>
 </form>
+</div>
 {% endif %}
 {% endblock %}
