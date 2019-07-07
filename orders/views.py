@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -12,7 +13,7 @@ from django.views import generic
 
 from .forms import CustomLoginForm, SignupForm
 
-from .models import Pizza, Size, Topping
+from .models import Cart, Entry, Pizza, Size, Topping
 
 
 class IndexView(generic.ListView):
@@ -156,21 +157,52 @@ def is_recaptcha_valid(request):
 
 
 def view_cart(request):
-    cart = request.session.get('cart', {})
+
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('orders:login'))
+
+    # Get the cart object for the corresponding user
+    user_cart = Cart.objects.get_or_create(user=request.user)
+
+    # Get a queryset of entries that correspond to 'user_cart'
+    list_of_entries = Entry.objects.filter(cart=user_cart)
+
+    # Make a list of the pizza names
+    list_of_pizzas = list(list_of_entries.values_list('pizza__pizza_name', flat=True))
+
+    # Remove reduntant pizza names
+    list_of_pizzas = list(set(list_of_pizzas))
 
     context = {
-        'cart': cart
+        'cart': list_of_pizzas
     }
 
-    print(cart)
+    print(list_of_pizzas)
 
     return render(request, 'orders/cart.html', context)
 
 
 def add_to_cart(request):
-    cart = request.session.get('cart', {})
+    temp_cart = request.session.get('cart', {})
     pizzaId = request.POST['pizzaId']
-    cart['item_id'] = pizzaId
-    request.session['cart'] = cart
+
+    # If item_id exists in temp_cart, just increment the item_quantity
+    if item_id in temp_cart:
+        current_quantity = cart['item_quantity']
+        current_quantity = current_quantity + 1
+        temp_cart['item_quantity'] = current_quantity
+    # Else, create a new item
+    else:
+        temp_cart['item_id'] = pizzaId
+        temp_cart['item_quantity'] = 1
+
+    # Get the cart object
+    cart = Cart.objects.all()
+
+    # If cart does not exist, create a new one
+    if not cart:
+        cart = Cart.create(temp_cart['item_id'], temp_cart['item_quantity'])
+
+    # request.session['cart'] = cart
 
     return HttpResponseRedirect(reverse('orders:details', args=(pizzaId,)))
