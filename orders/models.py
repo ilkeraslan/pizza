@@ -48,7 +48,7 @@ class Cart(models.Model):
 
 
 class Entry(models.Model):
-    pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE)
+    pizza = models.ForeignKey(Pizza, null=True, on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, null=True, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
 

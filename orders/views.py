@@ -1,6 +1,8 @@
 import requests
 import json
 
+from decimal import *
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -73,11 +75,13 @@ def login_view(request):
     if request.method == 'POST':
         form = CustomLoginForm(data=request.POST)
 
-        if not is_recaptcha_valid(request):
-            messages.error(request, "Invalid recaptcha.")
-            return render(request, 'registration/login.html', {'form': CustomLoginForm()})
-
         if form.is_valid():
+
+            # Check the recaptch field
+            if not is_recaptcha_valid(request):
+                messages.error(request, "Invalid recaptcha.")
+                return render(request, 'registration/login.html', {'form': CustomLoginForm()})
+
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
@@ -97,7 +101,7 @@ def login_view(request):
             return render(request, 'registration/login.html', {'form': CustomLoginForm()})
 
     else:
-            form = CustomLoginForm()
+        form = CustomLoginForm()
     return render(request, 'registration/login.html', {'form': form})
 
 
@@ -158,51 +162,48 @@ def is_recaptcha_valid(request):
 
 def view_cart(request):
 
+    # If user has not logged-in, redirect to login page
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('orders:login'))
 
     # Get the cart object for the corresponding user
-    user_cart = Cart.objects.get_or_create(user=request.user)
+    user_cart, created = Cart.objects.get_or_create(user=request.user)
 
     # Get a queryset of entries that correspond to 'user_cart'
     list_of_entries = Entry.objects.filter(cart=user_cart)
 
-    # Make a list of the pizza names
-    list_of_pizzas = list(list_of_entries.values_list('pizza__pizza_name', flat=True))
-
-    # Remove reduntant pizza names
-    list_of_pizzas = list(set(list_of_pizzas))
-
     context = {
-        'cart': list_of_pizzas
+        'cart': list_of_entries
     }
-
-    print(list_of_pizzas)
 
     return render(request, 'orders/cart.html', context)
 
 
 def add_to_cart(request):
-    temp_cart = request.session.get('cart', {})
+
+    # If user has not logged-in, redirect to login page
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('orders:login'))
+
+    # Get or create the cart for the current user
+    user_cart, created = Cart.objects.get_or_create(user=request.user)
+
+    # Get the pizza ID from the request
     pizzaId = request.POST['pizzaId']
 
-    # If item_id exists in temp_cart, just increment the item_quantity
-    if item_id in temp_cart:
-        current_quantity = cart['item_quantity']
-        current_quantity = current_quantity + 1
-        temp_cart['item_quantity'] = current_quantity
-    # Else, create a new item
-    else:
-        temp_cart['item_id'] = pizzaId
-        temp_cart['item_quantity'] = 1
+    # Get the quantity from the request
+    pizza_quantity = request.POST['pizza_quantity']
 
-    # Get the cart object
-    cart = Cart.objects.all()
+    # Cast it to Decimal to be able to multiply it with an int
+    pizza_quantity = Decimal(pizza_quantity)
 
-    # If cart does not exist, create a new one
-    if not cart:
-        cart = Cart.create(temp_cart['item_id'], temp_cart['item_quantity'])
+    # Get the pizza from the database that has the corresponding ID
+    pizza_to_add = Pizza.objects.get(id=pizzaId)
 
-    # request.session['cart'] = cart
+    # Create new entry which will update the cart
+    Entry.objects.create(cart=user_cart, pizza=pizza_to_add, quantity=pizza_quantity)
+
+    # Give success feedback
+    messages.success(request, "Added to cart.")
 
     return HttpResponseRedirect(reverse('orders:details', args=(pizzaId,)))

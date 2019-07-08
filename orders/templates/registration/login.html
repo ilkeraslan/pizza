@@ -1,33 +1,68 @@
 {% extends 'orders/base.html' %}
 
+{% load widget_tweaks %}
+
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'orders:index' %}">Menu</a></li>
   <li class="breadcrumb-item active" aria-current="page">Login</li>
 {% endblock %}
 
 {% block content %}
-  <form class="" action="{% url 'orders:login' %}" method="post">
+
+  <form class="" action="{% url 'orders:signup' %}" method="post">
     {% csrf_token %}
-    {% for field in form %}
-    <div class="form-group">
-      <p>
-        {{ field.label_tag }}<br>
-        {{ field }}
-        {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text }}</small>
-        {% endif %}
-        {% for error in field.errors %}
-          <p style="color: red">{{ error }}</p>
-        {% endfor %}
-      </p>
-    </div>
+    <button class="btn btn-warning" type="submit" name="button">Not a member? Register!</button>
+  </form>
+
+  <form class="" action="{% url 'orders:login' %}" method="post" novalidate>
+    {% csrf_token %}
+
+    {% for hidden_field in form.hidden_fields %}
+      {{ hidden_field }}
     {% endfor %}
 
-    <!-- ReCAPTCHAV3 -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger" role="alert">
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+      </div>
+    {% endif %}
 
-    <div class="g-recaptcha" data-sitekey='6Lfc-pYUAAAAAO3taFS_WEVDkOSPmOsNRN-hVah-'></div>
-    <button class="btn btn-success" type="submit" name="">Login</button>
-    <!-- <input type="hidden" name="next" value="{{ next }}"> -->
+    {% for field in form.visible_fields %}
+      <div class="form-group">
+        {{ field.label_tag }}
+
+        {% if form.is_bound %}
+          {% if field.errors %}
+            {% render_field field class="form-control is-invalid" %}
+            {% for error in field.errors %}
+              <div class="invalid-feedback">
+                {{ error }}
+              </div>
+            {% endfor %}
+          {% else %}
+            {% render_field field class="form-control is-valid" %}
+          {% endif %}
+        {% else %}
+          {% render_field field class="form-control" %}
+        {% endif %}
+
+        {% if field.help_text %}
+          <small class="form-text text-muted">{{ field.help_text }}</small>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <div>
+      <!-- ReCAPTCHAV3 -->
+      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+      <div class="g-recaptcha" data-sitekey='6Lfc-pYUAAAAAO3taFS_WEVDkOSPmOsNRN-hVah-'></div>
+      <div>
+        <button class="btn btn-success" type="submit" name="">Login</button>
+      </div>
+      <!-- <input type="hidden" name="next" value="{{ next }}"> -->
+    </div>
   </form>
 {% endblock %}
