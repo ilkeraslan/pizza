@@ -1,5 +1,7 @@
 {% extends 'orders/base.html' %}
 
+{% load widget_tweaks %}
+
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'orders:index' %}">Menu</a></li>
   <li class="breadcrumb-item active" aria-current="page">Signup</li>
@@ -8,19 +10,42 @@
 {% block content %}
   <form class="" action="{% url 'orders:signup' %}" method="post" novalidate>
     {% csrf_token %}
-    {% for field in form %}
-    <div class="form-group">
-      <p>
-        {{ field.label_tag }}<br>
-        {{ field }}
-        {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text }}</small>
-        {% endif %}
-        {% for error in field.errors %}
-          <p style="color: red">{{ error }}</p>
+
+    {% for hidden_field in form.hidden_fields %}
+      {{ hidden_field }}
+    {% endfor %}
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger" role="alert">
+        {% for error in form.non_field_errors %}
+          {{ error }}
         {% endfor %}
-      </p>
-    </div>
+      </div>
+    {% endif %}
+
+    {% for field in form.visible_fields %}
+      <div class="form-group">
+        {{ field.label_tag }}
+
+        {% if form.is_bound %}
+          {% if field.errors %}
+            {% render_field field class="form-control is-invalid" %}
+            {% for error in field.errors %}
+              <div class="invalid-feedback">
+                {{ error }}
+              </div>
+            {% endfor %}
+          {% else %}
+            {% render_field field class="form-control is-valid" %}
+          {% endif %}
+        {% else %}
+          {% render_field field class="form-control" %}
+        {% endif %}
+
+        {% if field.help_text %}
+          <small class="form-text text-muted">{{ field.help_text }}</small>
+        {% endif %}
+      </div>
     {% endfor %}
     <button class="btn btn-success" type="submit">Sign up</button>
   </form>

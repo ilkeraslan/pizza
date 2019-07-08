@@ -2,6 +2,7 @@ certifi==2018.11.29
 chardet==3.0.4
 Django==2.2.3
 django-recaptcha==2.0.2
+django-widget-tweaks==1.4.5
 idna==2.8
 pytz==2018.9
 requests==2.21.0

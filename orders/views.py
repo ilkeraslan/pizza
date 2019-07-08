@@ -96,9 +96,6 @@ def login_view(request):
                 return HttpResponseRedirect(reverse('orders:index'))
             else:
                 messages.error(request, "Invalid credentials.")
-        else:
-            messages.error(request, "Invalid form submission.")
-            return render(request, 'registration/login.html', {'form': CustomLoginForm()})
 
     else:
         form = CustomLoginForm()
@@ -134,7 +131,7 @@ def signup_view(request):
                 messages.error(request, "User already exists.")
 
     else:
-            form = SignupForm()
+        form = SignupForm()
     return render(request, 'registration/signup.html', {'form': form})
 
 

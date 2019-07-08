@@ -20,18 +20,6 @@ class CustomLoginForm(AuthenticationForm):
         widget=forms.PasswordInput()
     )
 
-    def clean(self):
-        cleaned_data = super(CustomLoginForm, self).clean()
-        username = cleaned_data.get('username')
-        email = cleaned_data.get('email')
-        password = cleaned_data.get('password')
-        if not username:
-            raise forms.ValidationError('Please provide your unique username.')
-        if not password:
-            raise forms.ValidationError('Provide your password.')
-        if not email:
-            raise forms.ValidationError('Please provide your email.')
-
 
 class SignupForm(UserCreationForm):
     first_name = forms.CharField(
