@@ -19,6 +19,8 @@ urlpatterns = [
 
     path('add_to_cart/', views.add_to_cart, name='add_to_cart'),
 
+    path('add_topping', views.add_topping, name='add_topping'),
+
     # ex: /login
     path('login/', views.login_view, name='login'),
 

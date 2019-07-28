@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>{{ pizza.pizza_name }}</h1>
+<h1 id="pizza_name">{{ pizza.pizza_name }}</h1>
 
 {% if error_message %}
 <p><strong>{{ error_message }}</strong></p>
@@ -14,47 +14,64 @@
 <p>Type: {{ pizza.pizza_type }}</p>
 <p>Description: {{ pizza.pizza_description }}</p>
 
-<div>
-<form class="" action="#" method="post">
-  {% csrf_token %}
+<div class="form-group">
+
   <div class="form-group">
     <label for="size">Size</label>
-    <select class="form-control" name="">
-      {% for size in size_list %}
-      <option value="{{ size }}">{{ size }}</option>
-      {% endfor %}
-    </select>
   </div>
+
+  <form class="" action="{% url 'orders:add_to_cart' %}" method="post">
+    {% csrf_token %}
+
+    <div class="form-row">
+      <div class="form-group col-auto">
+        <select class="form-control">
+          {% for size in size_list %}
+          <option value="{{ size }}">{{ size }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group col-auto" id="add_to_cart">
+          <div class="form-group">
+            <input type="hidden" name="pizzaId" value="{{ pizza.pk }}">
+            <select class="form-control" name="pizza_quantity">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div id="summary_before_add_to_cart" class="form-group"></div>
+      </div>
+
+      <div class="form-group col-auto">
+        <button class="btn btn-success" type="submit">Add to cart </button>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+
   <div class="form-group">
     <label for="topping">Topping</label>
   </div>
   <div class="form-row align-items-center">
-    <div class="form-group col-auto">
-      <select class="form-control" name="">
-        {% for topping in topping_list %}
-        <option value="{{ topping }}">{{ topping }}</option>
-        {% endfor %}
-      </select>
+    <form id="add_topping" action="{% url 'orders:add_topping' %}" method="post">
+      {% csrf_token %}
+      <div class="form-group col-auto">
+        <select class="form-control"  id="topping_selected">
+          {% for topping in topping_list %}
+          <option value="{{ topping }}">{{ topping }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group col-auto">
+        <button class="btn btn-secondary" type="submit">Add topping</button>
+      </div>
     </div>
-    <div class="form-group col-auto">
-      <button class="btn btn-secondary" type="submit">Add topping</button>
-    </div>
-  </div>
-</form>
-</div>
-
-<div id="add_to_cart" class="">
-  <form class="" action="{% url 'orders:add_to_cart' %}" method="post">
-    {% csrf_token %}
-      <input type="hidden" name="pizzaId" value="{{ pizza.pk }}">
-      <select class="form-control" name="pizza_quantity">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-      <button class="btn btn-success" type="submit">Add to cart </button>
   </form>
 </div>
 {% endif %}

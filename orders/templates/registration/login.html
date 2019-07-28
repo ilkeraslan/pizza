@@ -54,13 +54,13 @@
       <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
       <div class="g-recaptcha" data-sitekey='6Lfc-pYUAAAAAO3taFS_WEVDkOSPmOsNRN-hVah-'></div>
-      <button class="btn btn-success" type="submit" name="">Login</button>
+      <button class="btn btn-success my-3" type="submit" name="">Login</button>
       <!-- <input type="hidden" name="next" value="{{ next }}"> -->
     </div>
   </form>
 
   <form class="" action="{% url 'orders:signup' %}" method="post">
     {% csrf_token %}
-    <button class="btn btn-warning" type="submit" name="button">Not a member? Register!</button>
+    <button class="btn btn-warning my-3" type="submit" name="button">Not a member? Register!</button>
   </form>
 {% endblock %}

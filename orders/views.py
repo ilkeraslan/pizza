@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
@@ -204,3 +204,23 @@ def add_to_cart(request):
     messages.success(request, "Added to cart.")
 
     return HttpResponseRedirect(reverse('orders:details', args=(pizzaId,)))
+
+
+def add_topping(request):
+
+    # If request is not a POST request, return index
+    if request.method == 'POST':
+
+        print(request)
+
+        # Get the data from the POST request
+        topping_selected = request.POST.get('topping_selected')
+
+        print(topping_selected)
+
+        print(JsonResponse(topping_selected, safe=False))
+
+        return JsonResponse({"success":True, "topping_added": topping_selected}, safe=False)
+
+    # Else return false
+    return JsonResponse({"success":False}, safe=False)

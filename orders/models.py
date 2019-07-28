@@ -14,7 +14,7 @@ class Pizza(models.Model):
         return f"{self.pizza_name} ({self.pizza_type}) -- {self.pizza_description}"
 
     class Meta:
-        ordering = ['pizza_price']
+        ordering = ['pizza_type']
 
 
 class Size(models.Model):
