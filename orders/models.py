@@ -37,28 +37,41 @@ class Topping(models.Model):
 
 class Cart(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
-    count = models.PositiveIntegerField(default=0)
+    pizza_count = models.PositiveIntegerField(default=0)
+    topping_count = models.PositiveIntegerField(default=0)
+    pizza_total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    topping_total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    count = models.PositiveIntegerField(default=0)
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        # return f"Cart contains {self.total_items} items."
         return f"User: {self.user} has {self.count} items. Total cost: {self.total}"
 
 
 class Entry(models.Model):
     pizza = models.ForeignKey(Pizza, null=True, on_delete=models.CASCADE)
+    topping = models.ForeignKey(Topping, null=True, on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, null=True, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"This entry contains {self.quantity} {self.pizza.pizza_name}"
+        if self.pizza is not None:
+            return f"This entry contains {self.quantity} {self.pizza.pizza_name}"
+        return f"This entry contains {self.quantity} {self.topping.topping_text}"
 
 
 @receiver(post_save, sender=Entry)
 def update_cart(sender, instance, **kwargs):
-    line_cost = instance.quantity * instance.pizza.pizza_price
+    if type(sender) is Pizza:
+        line_cost = instance.quantity * instance.pizza.pizza_price
+        instance.cart.pizza_total += line_cost
+        instance.cart.pizza_count += instance.quantity
+    else:
+        line_cost = instance.quantity * instance.topping.topping_price
+        instance.cart.topping_total += line_cost
+        instance.cart.topping_count += instance.quantity
     instance.cart.total += line_cost
     instance.cart.count += instance.quantity
     instance.cart.updated = datetime.now()

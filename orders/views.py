@@ -211,16 +211,28 @@ def add_topping(request):
     # If request is not a POST request, return index
     if request.method == 'POST':
 
-        print(request)
+        # Get the cart for the current user
+        user_cart = Cart.objects.get(user=request.user)
+
+        # Get the pizza ID from the request
+        pizzaId = request.POST.get('pizzaId')
 
         # Get the data from the POST request
         topping_selected = request.POST.get('topping_selected')
 
-        print(topping_selected)
+        # Topping quantity is 1 by default
+        topping_quantity = 1
 
-        print(JsonResponse(topping_selected, safe=False))
+        # Get the topping from the database that has the corresponding ID
+        topping_to_add = Topping.objects.get(id=topping_selected)
 
-        return JsonResponse({"success":True, "topping_added": topping_selected}, safe=False)
+        # Create new entry which will update the cart
+        Entry.objects.create(cart=user_cart, topping=topping_to_add, quantity=topping_quantity)
+
+        # Give success feedback
+        messages.success(request, "Added the topping.")
+
+        return HttpResponseRedirect(reverse('orders:details', args=(pizzaId,)))
 
     # Else return false
-    return JsonResponse({"success":False}, safe=False)
+    return HttpResponseRedirect(reverse('orders:index'))
