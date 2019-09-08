@@ -234,16 +234,19 @@ def add_topping(request):
 
         return HttpResponseRedirect(reverse('orders:details', args=(pizzaId,)))
 
-    # Else return false
     return HttpResponseRedirect(reverse('orders:index'))
 
 
 def clear_cart(request):
     if request.method == 'POST':
-        user_cart = Cart.objects.all()
-        print(user_cart)
-        print(request)
-        print(request.user)
-        user_cart = None
+
+        # Get the user cart
+        user_cart = Cart.objects.filter(user=request.user)
+
+        # Delete all entries of user cart
+        cart_entries = Entry.objects.filter(cart__in=user_cart).delete()
+
+        # Print how many items were deleted
+        messages.success(request, "Deleted " +str(cart_entries[0]) + " items.")
 
     return HttpResponseRedirect(reverse('orders:cart'))
