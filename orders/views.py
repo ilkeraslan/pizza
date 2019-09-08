@@ -170,7 +170,8 @@ def view_cart(request):
     list_of_entries = Entry.objects.filter(cart=user_cart)
 
     context = {
-        'cart': list_of_entries
+        'cart': list_of_entries,
+        'stripe_public_key': settings.STRIPE_PUBLIC_KEY
     }
 
     return render(request, 'orders/cart.html', context)
@@ -249,4 +250,38 @@ def clear_cart(request):
         # Print how many items were deleted
         messages.success(request, "Deleted " +str(cart_entries[0]) + " items.")
 
+    return HttpResponseRedirect(reverse('orders:cart'))
+
+
+def checkout(request):
+
+    # If user has not logged-in, redirect to login page
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('orders:login'))
+
+    # If user came via a POST request
+    if request.method == 'POST':
+
+        context = {
+            'stripe_public_key': request.POST.get('stripe_public_key')
+        }
+        return render(request, 'orders/checkout.html', context)
+
+    # Else return cart view
+    messages.error(request, "You should control your cart before checkout.")
+    return HttpResponseRedirect(reverse('orders:cart'))
+
+
+def charge(request):
+
+    # If user has not logged-in, redirect to login page
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('orders:login'))
+
+    # If user came via a POST request
+    if request.method == 'POST':
+        return render(request, 'orders/thankyou.html')
+
+    # Else return cart view
+    messages.error(request, "You are not authorized to pay.")
     return HttpResponseRedirect(reverse('orders:cart'))

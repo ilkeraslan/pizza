@@ -1,0 +1,29 @@
+{% extends 'orders/base.html' %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'orders:index' %}">Menu</a></li>
+<li class="breadcrumb-item active" aria-current="page">Checkout</li>
+{% endblock %}
+
+{% block content %}
+<div class="">
+  <div class="">
+    <h1>Checkout Page</h1>
+    <p>User: {{ request.user }}</p>
+  </div>
+  <div class="">
+    <h2>Total: €5.00</h2>
+    <form action="{% url 'orders:charge' %}" method="post">
+      {% csrf_token %}
+      
+      <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-currency="eur"
+          data-key="{{ stripe_public_key }}"
+          data-description="Pizza Charge"
+          data-amount="500"
+          data-locale="auto">
+      </script>
+    </form>
+  </div>
+</div>
+{% endblock %}

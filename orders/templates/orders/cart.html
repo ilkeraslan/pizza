@@ -25,11 +25,21 @@
       <p>No item in cart.</p>
     {% endif %}
   </div>
-  <div class="">
-    <form class="" action="{% url 'orders:clear_cart' %}" method="post">
-      {% csrf_token %}
-      <button class="btn btn-danger" type="submit">Clear Cart</button>
-    </form>
+
+  <div class="form-row">
+    <div class="form-group col text-center">
+      <form class="" action="{% url 'orders:checkout' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="stripe_public_key" value="{{ stripe_public_key }}">
+        <button class="btn btn-success" type="submit">Checkout</button>
+      </form>
+    </div>
+    <div class="form-group col text-center">
+      <form class="" action="{% url 'orders:clear_cart' %}" method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Clear Cart</button>
+      </form>
+    </div>
   </div>
 </div>
 {% endblock %}

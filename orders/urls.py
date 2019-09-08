@@ -17,11 +17,15 @@ urlpatterns = [
 
     path('cart/', views.view_cart, name='cart'),
 
-    path('clear_cart', views.clear_cart, name='clear_cart'),
+    path('clear_cart/', views.clear_cart, name='clear_cart'),
 
     path('add_to_cart/', views.add_to_cart, name='add_to_cart'),
 
-    path('add_topping', views.add_topping, name='add_topping'),
+    path('add_topping/', views.add_topping, name='add_topping'),
+
+    path('charge/', views.charge, name='charge'),
+
+    path('checkout/', views.checkout, name='checkout'),
 
     # ex: /login
     path('login/', views.login_view, name='login'),

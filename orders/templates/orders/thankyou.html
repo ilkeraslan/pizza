@@ -1,0 +1,12 @@
+{% extends 'orders/base.html' %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'orders:index' %}">Menu</a></li>
+<li class="breadcrumb-item active" aria-current="page">Thank You</li>
+{% endblock %}
+
+{% block content %}
+<div class="">
+  <h3>Thanks, you paid <strong>€5,00</strong>!</h3>
+</div>
+{% endblock %}
