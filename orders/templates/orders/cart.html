@@ -25,5 +25,11 @@
       <p>No item in cart.</p>
     {% endif %}
   </div>
+  <div class="">
+    <form class="" action="{% url 'orders:clear_cart' %}" method="post">
+      {% csrf_token %}
+      <button class="btn btn-danger" type="submit">Clear Cart</button>
+    </form>
+  </div>
 </div>
 {% endblock %}

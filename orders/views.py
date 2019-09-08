@@ -198,7 +198,7 @@ def add_to_cart(request):
     pizza_to_add = Pizza.objects.get(id=pizzaId)
 
     # Create new entry which will update the cart
-    Entry.objects.create(cart=user_cart, pizza=pizza_to_add, quantity=pizza_quantity)
+    Entry.objects.create(cart=user_cart, pizza=pizza_to_add, quantity=pizza_quantity, topping=None)
 
     # Give success feedback
     messages.success(request, "Added to cart.")
@@ -227,7 +227,7 @@ def add_topping(request):
         topping_to_add = Topping.objects.get(id=topping_selected)
 
         # Create new entry which will update the cart
-        Entry.objects.create(cart=user_cart, topping=topping_to_add, quantity=topping_quantity)
+        Entry.objects.create(cart=user_cart, topping=topping_to_add, quantity=topping_quantity, pizza=None)
 
         # Give success feedback
         messages.success(request, "Added the topping.")
@@ -236,3 +236,14 @@ def add_topping(request):
 
     # Else return false
     return HttpResponseRedirect(reverse('orders:index'))
+
+
+def clear_cart(request):
+    if request.method == 'POST':
+        user_cart = Cart.objects.all()
+        print(user_cart)
+        print(request)
+        print(request.user)
+        user_cart = None
+
+    return HttpResponseRedirect(reverse('orders:cart'))
