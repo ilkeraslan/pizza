@@ -15,7 +15,13 @@
     <ol>
     {% for item_in_cart in cart %}
       {% if item_in_cart.pizza != none %}
-        <li>{{ item_in_cart.pizza }}, quantity: {{ item_in_cart.quantity }}</li>
+        <li>
+          <ul>
+            <li>{{ item_in_cart.pizza }}</li>
+            <li><strong>quantity: {{ item_in_cart.quantity }}</strong></li>
+            <li><strong>price: €{{ item_in_cart.entry_price }}</strong></li>
+          </ul>
+        </li>
       {% else %}
         <li>{{ item_in_cart.topping }}, quantity: {{ item_in_cart.quantity }}</li>
       {% endif %}

@@ -36,7 +36,6 @@ class Topping(models.Model):
 
 
 class Cart(models.Model):
-    # TODO: Fix the error about Entry not passing to Cart
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     pizza_count = models.PositiveIntegerField(default=0)
     topping_count = models.PositiveIntegerField(default=0)
@@ -56,6 +55,7 @@ class Entry(models.Model):
     topping = models.ForeignKey(Topping, null=True, on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, null=True, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
+    entry_price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
 
     def __str__(self):
         if self.pizza is not None:
@@ -74,5 +74,6 @@ def update_cart(sender, instance, **kwargs):
         instance.cart.topping_total += line_cost
         instance.cart.topping_count += instance.quantity
     instance.cart.total += line_cost
-    instance.cart.count += instance.quantity
+    quantity = int(instance.quantity)
+    instance.cart.count += quantity
     instance.cart.updated = datetime.now()
