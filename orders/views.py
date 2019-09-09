@@ -202,7 +202,9 @@ def add_to_cart(request):
     entry_price = pizza_quantity * pizza_to_add.pizza_price
 
     # Create new entry which will update the cart
-    Entry.objects.create(cart=user_cart, pizza=pizza_to_add, quantity=pizza_quantity, topping=None, entry_price=entry_price)
+    entry = Entry.objects.create(cart=user_cart, pizza=pizza_to_add, quantity=pizza_quantity, topping=None, entry_price=entry_price)
+
+    request.session['last_entry'] = entry
 
     # Give success feedback
     messages.success(request, "Added to cart.")
