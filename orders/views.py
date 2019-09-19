@@ -169,10 +169,14 @@ def view_cart(request):
     # Get a queryset of entries that correspond to 'user_cart'
     list_of_entries = Entry.objects.filter(cart=user_cart)
 
+    cart_total = list_of_entries.first()
     context = {
         'cart': list_of_entries,
+        'cart_total': cart_total,
         'stripe_public_key': settings.STRIPE_PUBLIC_KEY
     }
+
+    print(list_of_entries)
 
     return render(request, 'orders/cart.html', context)
 
@@ -210,6 +214,7 @@ def add_to_cart(request):
         entry_price=entry_price
     )
 
+    # Store the pizzaId to session in order to use it in add_topping view
     request.session['last_entry'] = pizzaId
 
     # Give success feedback
@@ -254,7 +259,7 @@ def add_topping(request):
 
             return HttpResponseRedirect(reverse('orders:details', args=(pizzaId,)))
 
-        # Else error
+        # Else error, redirect to details
         else:
             messages.error(request, "You can't add topping before adding that pizza to cart.")
             return HttpResponseRedirect(reverse('orders:details', args=(pizzaId,)))

@@ -47,7 +47,7 @@ class Cart(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"User: {self.user} has {self.count} items. Total cost: {self.total}"
+        return f"{self.user}, you have {self.count} items. Total cost: {self.total}"
 
 
 class Entry(models.Model):
@@ -65,14 +65,16 @@ class Entry(models.Model):
 
 @receiver(post_save, sender=Entry)
 def update_cart(sender, instance, **kwargs):
-    if (instance.topping) is None:
+    if instance.pizza:
         line_cost = instance.quantity * instance.pizza.pizza_price
         instance.cart.pizza_total += line_cost
         instance.cart.pizza_count += instance.quantity
-    else:
+    elif instance.topping:
         line_cost = instance.quantity * instance.topping.topping_price
         instance.cart.topping_total += line_cost
         instance.cart.topping_count += instance.quantity
+    else:
+        print("error!")
     instance.cart.total += line_cost
     quantity = int(instance.quantity)
     instance.cart.count += quantity

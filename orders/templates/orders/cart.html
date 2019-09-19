@@ -12,6 +12,7 @@
   </div>
   <div id="cart" class="">
     {% if cart %}
+    <p><strong>{{ cart_total.cart }}</strong></p>
     <ol>
     {% for item_in_cart in cart %}
       {% if item_in_cart.pizza != none %}

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Pizza, Size, Topping
+from .models import Cart, Pizza, Size, Topping
 
 
 class PizzaAdmin(admin.ModelAdmin):
@@ -35,6 +35,23 @@ class ToppingAdmin(admin.ModelAdmin):
     search_fields = ['topping_text']
 
 
+class CartAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('Cart information', {'fields': ['user', 'pizza_count', 'total']}),
+        ('Cart total', {'fields': ['pizza_total', 'topping_total']})
+    ]
+
+    # Use list_display, a tuple of field names to display as columns
+    list_display = ('user', 'pizza_count', 'total')
+
+    # Use list filter to add a sidebar to filter
+    list_filter = ['user']
+
+    # Add a search box to search topping texts
+    search_fields = ['user']
+
+
 admin.site.register(Pizza, PizzaAdmin)
 admin.site.register(Size)
 admin.site.register(Topping, ToppingAdmin)
+admin.site.register(Cart, CartAdmin)
