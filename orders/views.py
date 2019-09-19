@@ -202,9 +202,15 @@ def add_to_cart(request):
     entry_price = pizza_quantity * pizza_to_add.pizza_price
 
     # Create new entry which will update the cart
-    entry = Entry.objects.create(cart=user_cart, pizza=pizza_to_add, quantity=pizza_quantity, topping=None, entry_price=entry_price)
+    entry = Entry.objects.create(
+        cart=user_cart,
+        pizza=pizza_to_add,
+        quantity=pizza_quantity,
+        topping=None,
+        entry_price=entry_price
+    )
 
-    request.session['last_entry'] = entry
+    request.session['last_entry'] = pizzaId
 
     # Give success feedback
     messages.success(request, "Added to cart.")
@@ -223,22 +229,35 @@ def add_topping(request):
         # Get the pizza ID from the request
         pizzaId = request.POST.get('pizzaId')
 
-        # Get the data from the POST request
-        topping_selected = request.POST.get('topping_selected')
+        # If user wants to add topping to the last pizza added to cart, continue
+        if pizzaId is request.session.get('last_entry'):
 
-        # Topping quantity is 1 by default
-        topping_quantity = 1
+            # Get the data from the POST request
+            topping_selected = request.POST.get('topping_selected')
 
-        # Get the topping from the database that has the corresponding ID
-        topping_to_add = Topping.objects.get(id=topping_selected)
+            # Topping quantity is 1 by default
+            topping_quantity = 1
 
-        # Create new entry which will update the cart
-        Entry.objects.create(cart=user_cart, topping=topping_to_add, quantity=topping_quantity, pizza=None)
+            # Get the topping from the database that has the corresponding ID
+            topping_to_add = Topping.objects.get(id=topping_selected)
 
-        # Give success feedback
-        messages.success(request, "Added the topping.")
+            # Create new entry which will update the cart
+            Entry.objects.create(
+                cart=user_cart,
+                topping=topping_to_add,
+                quantity=topping_quantity,
+                pizza=None
+            )
 
-        return HttpResponseRedirect(reverse('orders:details', args=(pizzaId,)))
+            # Give success feedback
+            messages.success(request, "Added the topping.")
+
+            return HttpResponseRedirect(reverse('orders:details', args=(pizzaId,)))
+
+        # Else error
+        else:
+            messages.error(request, "You can't add topping before adding that pizza to cart.")
+            return HttpResponseRedirect(reverse('orders:details', args=(pizzaId,)))
 
     return HttpResponseRedirect(reverse('orders:index'))
 
